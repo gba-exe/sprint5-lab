@@ -27,6 +27,11 @@ jobs:
           cd infra
           terraform init
           terraform apply -auto-approve
+
+      - name: Adicionar chave SSH
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > control-node.pem
+          chmod 400 control-node.pem
           
       - name: Configurar EC2 com Ansible
         run: |
