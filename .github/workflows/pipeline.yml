@@ -12,6 +12,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependências Python
+        run: pip install -r requirements.txt
+
       - name: Configurar credenciais AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -25,12 +33,19 @@ jobs:
           terraform init
           terraform apply -auto-approve
 
+      - name: Obter IP da EC2 do Terraform
+        id: ec2
+        working-directory: infra
+        run: |
+          echo "EC2_IP=$(terraform output -raw ec2_public_ip)" >> $GITHUB_ENV
+
       - name: Configurar EC2 com Ansible
         working-directory: ansible
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: "False"
         run: |
-          ansible-playbook -i inventory.ini setup.yml
+          ansible-playbook -i "$EC2_IP," -u ec2-user --private-key ~/.ssh/mykey.pem setup.yml
 
       - name: Executar pipeline de dados
-        run: |
-          python scripts/data_pipeline.py
+        run: python scripts/data_pipeline.py
 
