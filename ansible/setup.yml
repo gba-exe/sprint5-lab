@@ -1,6 +1,16 @@
 - hosts: ec2
   become: yes
+  gather_facts: no
+
   tasks:
+    - name: Ensure Python 3 is installed
+      raw: |
+        sudo yum install -y python3
+      changed_when: false
+
+    - name: Re-enable fact gathering
+      setup:
+
     - name: Instalar pacotes básicos
       yum:
         name:
