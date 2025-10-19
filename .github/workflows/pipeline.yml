@@ -32,10 +32,11 @@ jobs:
         run: |
           echo "${{ secrets.EC2_SSH_KEY }}" > control-node.pem
           chmod 400 control-node.pem
-          
+
       - name: Configurar EC2 com Ansible
         run: |
           cd ansible
+          export ANSIBLE_HOST_KEY_CHECKING=False
           ansible-playbook -i inventory.ini setup.yml
           
       - name: Executar pipeline de dados
