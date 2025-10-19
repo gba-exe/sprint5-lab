@@ -30,8 +30,8 @@ jobs:
 
       - name: Adicionar chave SSH
         run: |
-          echo "${{ secrets.EC2_SSH_KEY }}" > control-node.pem
-          chmod 400 control-node.pem
+          echo "${{ secrets.EC2_SSH_KEY }}" > ansible/control-node.pem
+          chmod 400 ansible/control-node.pem
 
       - name: Configurar EC2 com Ansible
         run: |
