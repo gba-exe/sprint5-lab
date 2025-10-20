@@ -1,16 +1,29 @@
 - hosts: ec2
   become: yes
-  gather_facts: no
+  gather_facts: false
   vars:
     ansible_python_interpreter: /usr/bin/python3
 
   tasks:
     - name: Ensure Python 3 is installed
-      raw: test -e /usr/bin/python3 || (sudo yum install -y python3)
-      changed_when: false
+      raw: |
+        if ! command -v python3 >/dev/null 2>&1; then
+          sudo yum install -y python3
+        fi
+      register: python_install
+      changed_when: python_install.rc == 0
+      ignore_errors: yes
 
-    - name: Re-enable fact gathering
+    - name: Wait a moment before fact gathering (avoid SSH race condition)
+      pause:
+        seconds: 3
+
+    - name: Re-enable fact gathering safely
       setup:
+      retries: 3
+      delay: 2
+      register: setup_result
+      until: setup_result is succeeded
 
     - name: Instalar pacotes básicos
       yum:
