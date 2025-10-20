@@ -20,14 +20,6 @@ resource "aws_security_group" "ssh_sg" {
     protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
   }
-
-  egress {
-    description      = "SSH"
-    from_port        = 22
-    to_port          = 22
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-  }
 }
 
 resource "aws_s3_bucket" "lab" {
