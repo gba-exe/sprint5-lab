@@ -43,7 +43,7 @@ jobs:
         run: |
           cd ansible
           export ANSIBLE_HOST_KEY_CHECKING=False
-          ansible-playbook -i inventory.ini setup.yml -e 'ansible_python_interpreter=/usr/bin/python3'
+          ansible-playbook -i inventory.ini setup.yml
           
       - name: Executar pipeline de dados
         run: |
