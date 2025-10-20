@@ -42,6 +42,7 @@ jobs:
       - name: Configurar EC2 com Ansible
         run: |
           cd ansible
+          export ANSIBLE_HOST_KEY_CHECKING=False
           ansible-playbook -i inventory.ini setup.yml
           
       - name: Executar pipeline de dados
