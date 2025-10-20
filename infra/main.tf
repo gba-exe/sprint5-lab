@@ -11,13 +11,21 @@ resource "aws_security_group" "ssh_sg" {
     from_port        = 22
     to_port          = 22
     protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"] # substitua pelo seu IP público
+    cidr_blocks      = ["0.0.0.0/0"] 
   }
 
   egress {
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+  egress {
+    description      = "SSH"
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
   }
 }
@@ -32,7 +40,7 @@ status = "Enabled"
 }
 }
 resource "aws_instance" "app_server" {
-ami = "ami-0c02fb55956c7d316" # Amazon Linux 2
+ami = "ami-0341d95f75f311023" # Amazon Linux 2
 instance_type = "t2.micro"
 key_name = "control-node"
 tags = {
