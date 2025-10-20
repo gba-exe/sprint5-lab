@@ -1,6 +1,7 @@
 - name: Configuração inicial da instância EC2
   hosts: ec2
   become: yes
+  ansible_python_interpreter: /usr/bin/python3
   tasks:
 
     - name: Instalar pacotes básicos
